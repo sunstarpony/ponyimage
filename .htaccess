@@ -1,0 +1,36 @@
+# ============================================================
+# PonyImage Apache .htaccess（未使用 Nginx 时的兜底防护）
+# 生产环境优先使用 Nginx（见 nginx.conf），本文件作为二级防线
+# ============================================================
+
+# 禁止列出目录内容
+Options -Indexes
+
+# ---------- 敏感文件禁止访问 ----------
+<FilesMatch "\.(sql|md|log|ini|example|bak|old|db|sqlite)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# 隐藏文件（.git / .htaccess 本身等）
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ---------- 入口路由 ----------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # 默认入口
+    DirectoryIndex index.php
+</IfModule>

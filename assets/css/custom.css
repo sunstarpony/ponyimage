@@ -1,0 +1,329 @@
+/**
+ * PonyImage 自定义样式（覆盖 Bootstrap 默认）
+ * 布局：左侧 220px 固定侧边栏 + 右侧自适应主区域
+ */
+
+:root {
+    --pony-sidebar-width: 64px;
+    --pony-sidebar-bg: #1e293b;
+    --pony-sidebar-hover: #334155;
+    --pony-sidebar-active: #2563eb;
+    --pony-bg: #f1f5f9;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: var(--pony-bg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+                 "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* ============ 整体布局 ============ */
+
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-main {
+    flex: 1 1 auto;
+    min-width: 0;              /* 防止 flex 溢出 */
+    padding: 1.75rem 2rem 3rem;
+    max-width: 1400px;
+}
+
+/* ============ 侧边栏（纯图标窄栏） ============ */
+
+.sidebar {
+    flex: 0 0 var(--pony-sidebar-width);
+    width: var(--pony-sidebar-width);
+    background: var(--pony-sidebar-bg);
+    color: #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    /* 保持 overflow: visible：悬停提示气泡需向右侧绘制。
+       一旦本容器成为滚动容器（overflow-y: auto 会连带 overflow-x 变 auto），
+       绝对定位的气泡就会撑出底部水平滚动条 */
+    overflow: visible;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    color: #fff;
+    font-size: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    text-decoration: none;
+}
+
+.sidebar-brand i {
+    color: #60a5fa;
+}
+
+.sidebar-brand:hover i {
+    color: #93c5fd;
+}
+
+.sidebar-nav {
+    flex: 1 1 auto;
+    padding: .75rem .5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .375rem;
+}
+
+.sidebar-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    border-radius: .5rem;
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: background .15s ease, color .15s ease;
+}
+
+.sidebar-link i {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.sidebar-link:hover {
+    background: var(--pony-sidebar-hover);
+    color: #fff;
+}
+
+.sidebar-link.active {
+    background: var(--pony-sidebar-active);
+    color: #fff;
+}
+
+/* ---- 悬停文字提示（代替图标栏中的文字标签） ---- */
+
+.sidebar [data-tip] {
+    position: relative;
+}
+
+.sidebar [data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    background: #0f172a;
+    color: #f1f5f9;
+    font-size: .78rem;
+    line-height: 1;
+    padding: .45rem .6rem;
+    border-radius: .375rem;
+    box-shadow: 0 .25rem .75rem rgba(15, 23, 42, .3);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .12s ease;
+    z-index: 1200;
+}
+
+.sidebar [data-tip]:hover::after,
+.sidebar [data-tip]:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-footer {
+    padding: .75rem .5rem;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.sidebar-user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    border-radius: .5rem;
+    background: rgba(255, 255, 255, .06);
+}
+
+.sidebar-user i {
+    font-size: 1.35rem;
+    color: #94a3b8;
+}
+
+#btnLogout {
+    padding: .375rem 0;
+}
+
+/* ============ 上传拖拽区 ============ */
+
+.dropzone {
+    border: 2px dashed #94a3b8;
+    border-radius: 1rem;
+    background: #fff;
+    padding: 3.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    outline: none;
+}
+
+.dropzone:hover,
+.dropzone:focus-visible,
+.dropzone.dragging {
+    border-color: var(--pony-sidebar-active);
+    background: #eff6ff;
+    box-shadow: 0 .125rem .75rem rgba(37, 99, 235, .12);
+}
+
+.dropzone-icon {
+    font-size: 3rem;
+    color: #60a5fa;
+    display: block;
+    margin-bottom: .75rem;
+}
+
+.upload-result-card {
+    border-left: 4px solid #22c55e;
+}
+
+/* ============ 图片卡片网格 ============ */
+
+.image-card {
+    transition: box-shadow .15s ease, transform .15s ease;
+    overflow: hidden;
+}
+
+.image-card:hover {
+    box-shadow: 0 .5rem 1.25rem rgba(15, 23, 42, .14);
+    transform: translateY(-2px);
+}
+
+.image-card-thumb {
+    display: block;
+    aspect-ratio: 4 / 3;
+    background-color: #e9eef4;   /* 纯色底，不使用渐变 */
+    overflow: hidden;
+}
+
+.image-card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.btn-xs {
+    --bs-btn-padding-y: .12rem;
+    --bs-btn-padding-x: .4rem;
+    --bs-btn-font-size: .75rem;
+}
+
+/* ============ 登录页 ============ */
+
+.login-wrap {
+    min-height: calc(100vh - 5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 380px;
+    border-radius: 1rem;
+}
+
+.login-icon {
+    font-size: 3rem;
+    color: #2563eb;
+}
+
+/* ============ 其他 ============ */
+
+.page-head {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1rem;
+}
+
+.font-monospace {
+    font-size: .78rem !important;
+}
+
+.stat-card {
+    border-radius: .75rem;
+}
+
+@media (max-width: 767.98px) {
+    .app-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: static;
+        width: 100%;
+        flex: none;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+        /* 横向图标栏：允许滚动但隐藏滚动条 */
+        scrollbar-width: none;
+    }
+
+    .sidebar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sidebar-brand {
+        height: auto;
+        padding: .8rem 1rem;
+        border-bottom: none;
+        border-right: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: .5rem .5rem;
+    }
+
+    /* 顶部横栏下不显示侧向文字提示 */
+    .sidebar [data-tip]::after {
+        display: none;
+    }
+
+    .sidebar-footer {
+        flex-direction: row;
+        align-items: center;
+        margin-left: auto;
+        border-top: none;
+        border-left: 1px solid rgba(255, 255, 255, .08);
+        padding: .5rem;
+    }
+
+    .sidebar-user {
+        height: 40px;
+        width: 40px;
+    }
+
+    #btnLogout {
+        width: auto !important;
+        padding: .375rem .6rem;
+    }
+
+    .app-main {
+        padding: 1rem 1rem 2rem;
+    }
+}

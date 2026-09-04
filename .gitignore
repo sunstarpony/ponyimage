@@ -1,0 +1,29 @@
+# 运行时目录（日志/限流/会话）
+runtime/*
+!runtime/.htaccess
+!runtime/logs/
+!runtime/logs/index.html
+!runtime/ratelimit/
+!runtime/ratelimit/index.html
+
+# 用户上传内容
+uploads/*
+!uploads/.htaccess
+!uploads/index.html
+thumbs/*
+!thumbs/.htaccess
+!thumbs/index.html
+
+# SQLite 数据库
+db/*
+!db/.htaccess
+!db/index.html
+
+# 真实配置（保留模板）
+config/config.php
+
+# 编辑器 / 系统
+.idea/
+.vscode/
+.DS_Store
+*.swp
